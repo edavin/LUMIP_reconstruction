@@ -60,8 +60,8 @@ import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 
 ##########################################################
+# User settings
 ##########################################################
-#parameters to define!
 #years_start_end = [1900, 2017]
 season = "JJA" #"JJA" or "DJF"
 scen = "reg"
