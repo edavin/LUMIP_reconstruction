@@ -1,37 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-#module load conda
-#source activate iacpy3_2020
-
-#interactive mode:
-#jupyter notebook --browser=chromium &
-
-#batch script:
-#python script.py
-
-#check CF compliance of IO files:
-#cfchecks file.nc
-
-##to run jupiter remotely:
-
-#On the server
-
-#tmux new-session -s 'background jobs'
-#alternative "screen"
-#cd ~
-#module load conda/<year>
-#source activate <environment>
-#jupyter notebook --no-browser --port 55000
-
-#     If the port is already in use jupyter will select the next higher available. Make sure that you use the right port in the next part.
-#    On your computer:
-
-#ssh -f -N -L localhost:8888:localhost:55000 SERVER
-
-#    Open the browser and go to: http://127.0.0.1:8888
-#    Copy the token given by the jupyter notebook on the server and paste it in the login field.
-    
 #!/usr/bin/env python3
 """
 Created 2020
@@ -65,37 +31,29 @@ import matplotlib.pyplot as plt
 #years_start_end = [1900, 2017]
 season = "JJA" #"JJA" or "DJF"
 scen = "reg"
-blue_dir = "/net/ch4/landclim/edavin/LUMIP/BLUE/"
+blue_dir = "/net/ch4/landclim/edavin/LUMIP/BLUE/PFT11corr/"
+blue_ver = "gracorr" #addc2p  new
+irri_dir = "/net/ch4/landclim/edavin/LUMIP/BLUE/"
+TS_dir = "/landclim/edavin/LUMIP/"
 out_dir = "/net/ch4/landclim/edavin/LUMIP/python/"
 #############################################################
 
 #load BLUE data files
 
-file_luc_DBF2CRO = blue_dir+"addc2p/reg/DBF2CRO_time_"+scen+"_addc2p.nc"
-file_luc_DNF2CRO = blue_dir+"addc2p/reg/DNF2CRO_time_"+scen+"_addc2p.nc"
-file_luc_EBF2CRO = blue_dir+"addc2p/reg/EBF2CRO_time_"+scen+"_addc2p.nc"
-file_luc_ENF2CRO = blue_dir+"addc2p/reg/ENF2CRO_time_"+scen+"_addc2p.nc"
-file_luc_DBF2GRA = blue_dir+"addc2p/reg/DBF2GRA_time_"+scen+"_addc2p.nc"
-file_luc_DNF2GRA = blue_dir+"addc2p/reg/DNF2GRA_time_"+scen+"_addc2p.nc"
-file_luc_EBF2GRA = blue_dir+"addc2p/reg/EBF2GRA_time_"+scen+"_addc2p.nc"
-file_luc_ENF2GRA = blue_dir+"addc2p/reg/ENF2GRA_time_"+scen+"_addc2p.nc"
-file_luc_GRA2CRO = blue_dir+"addc2p/reg/GRA2CRO_time_"+scen+"_addc2p.nc"
-file_luc_CROr2CROi = blue_dir+"CROr2CROi_time_"+scen+"_new.nc"
-
-#file_luc_DBF2CRO = blue_dir+"DBF2CRO_time_"+scen+"_new.nc"
-#file_luc_DNF2CRO = blue_dir+"DNF2CRO_time_"+scen+"_new.nc"
-#file_luc_EBF2CRO = blue_dir+"EBF2CRO_time_"+scen+"_new.nc"
-#file_luc_ENF2CRO = blue_dir+"ENF2CRO_time_"+scen+"_new.nc"
-#file_luc_DBF2GRA = blue_dir+"DBF2GRA_time_"+scen+"_new.nc"
-#file_luc_DNF2GRA = blue_dir+"DNF2GRA_time_"+scen+"_new.nc"
-#file_luc_EBF2GRA = blue_dir+"EBF2GRA_time_"+scen+"_new.nc"
-#file_luc_ENF2GRA = blue_dir+"ENF2GRA_time_"+scen+"_new.nc"
-#file_luc_GRA2CRO = blue_dir+"GRA2CRO_time_"+scen+"_new.nc"
-#file_luc_CROr2CROi = blue_dir+"CROr2CROi_time_"+scen+"_new.nc"
+file_luc_DBF2CRO = blue_dir+"DBF2CRO_time_"+scen+"_"+blue_ver+".nc"
+file_luc_DNF2CRO = blue_dir+"DNF2CRO_time_"+scen+"_"+blue_ver+".nc"
+file_luc_EBF2CRO = blue_dir+"EBF2CRO_time_"+scen+"_"+blue_ver+".nc"
+file_luc_ENF2CRO = blue_dir+"ENF2CRO_time_"+scen+"_"+blue_ver+".nc"
+file_luc_DBF2GRA = blue_dir+"DBF2GRA_time_"+scen+"_"+blue_ver+".nc"
+file_luc_DNF2GRA = blue_dir+"DNF2GRA_time_"+scen+"_"+blue_ver+".nc"
+file_luc_EBF2GRA = blue_dir+"EBF2GRA_time_"+scen+"_"+blue_ver+".nc"
+file_luc_ENF2GRA = blue_dir+"ENF2GRA_time_"+scen+"_"+blue_ver+".nc"
+file_luc_GRA2CRO = blue_dir+"GRA2CRO_time_"+scen+"_"+blue_ver+".nc"
+file_luc_CROr2CROi = irri_dir+"CROr2CROi_time_"+scen+"_new.nc"
 
 #B17 and D18 data
-dataDIR_D18 = "/landclim/edavin/LUMIP/D18_LST_0.25dw_IGBPdet.nc"
-dataDIR_B17 = "/landclim/edavin/LUMIP/B17_0.25dw_DTS.nc"
+dataDIR_D18 = TS_dir+"D18_LST_0.25dw_IGBPdet.nc"
+dataDIR_B17 = TS_dir+"B17_0.25dw_DTS.nc"
 
 #open TS data
 DS_D18 = xr.open_dataset(dataDIR_D18)
