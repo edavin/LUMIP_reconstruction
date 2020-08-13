@@ -25,11 +25,11 @@ python scripts for reconstructing land use change impact on surface temperature 
 #source activate <environment>
 #jupyter notebook --no-browser --port 55000
 
-#     If the port is already in use jupyter will select the next higher available. Make sure that you use the right port in the next part.
-#    On your computer:
+#If the port is already in use jupyter will select the next higher available. Make sure that you use the right port in the next part.
+#On your computer:
 
 #ssh -f -N -L localhost:8888:localhost:55000 SERVER
 
-#    Open the browser and go to: http://127.0.0.1:8888
-#    Copy the token given by the jupyter notebook on the server and paste it in the login field.
+#Open the browser and go to: http://127.0.0.1:8888
+#Copy the token given by the jupyter notebook on the server and paste it in the login field.
     

@@ -34,7 +34,7 @@ scen = "reg"
 blue_dir = "/net/ch4/landclim/edavin/LUMIP/BLUE/PFT11corr/"
 blue_ver = "gracorr" #addc2p  new
 irri_dir = "/net/ch4/landclim/edavin/LUMIP/BLUE/"
-TS_dir = "/landclim/edavin/LUMIP/"
+TS_dir = "/landclim/edavin/LUMIP/TS_data/"
 out_dir = "/net/ch4/landclim/edavin/LUMIP/python/"
 #############################################################
 
@@ -225,8 +225,10 @@ TSrec_D18 = DS_D18_day * DS_luc
 
 # derive a map showing where B17 or D18 have no values while a conversion exists
 DS_luc_sum = DS_luc.sum(dim=["time"])
-B17_missing = DS_B17_day.notnull().where(DS_luc_sum != 0.)
-D18_missing = DS_D18_day.notnull().where(DS_luc_sum != 0.)
+#B17_missing = DS_B17_day.notnull().where(DS_luc_sum != 0.)
+#D18_missing = DS_D18_day.notnull().where(DS_luc_sum != 0.)
+B17_missing = DS_luc_sum.where(DS_B17_day.isnull())
+D18_missing = DS_luc_sum.where(DS_D18_day.isnull())
 
 #write full transient data to netcdf
 
