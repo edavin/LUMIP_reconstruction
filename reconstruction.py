@@ -51,14 +51,6 @@ file_luc_ENF2GRA = blue_dir+"ENF2GRA_time_"+scen+"_"+blue_ver+".nc"
 file_luc_GRA2CRO = blue_dir+"GRA2CRO_time_"+scen+"_"+blue_ver+".nc"
 file_luc_CROr2CROi = irri_dir+"CROr2CROi_time_"+scen+"_new.nc"
 
-#B17 and D18 data
-dataDIR_D18 = TS_dir+"D18_LST_0.25dw_IGBPdet.nc"
-dataDIR_B17 = TS_dir+"B17_0.25dw_DTS.nc"
-
-#open TS data
-DS_D18 = xr.open_dataset(dataDIR_D18)
-DS_B17 = xr.open_dataset(dataDIR_B17)
-
 #open and concatenate LUC (BLUE/LUH2) data  
 #this option will reorder datasets alphabeticaly
 #DS_luc_reg = xr.open_mfdataset([dataDIR_luc_DBF2CRO_reg,dataDIR_luc_DNF2CRO_reg,dataDIR_luc_EBF2CRO_reg,dataDIR_luc_ENF2CRO_reg,dataDIR_luc_DBF2GRA_reg,dataDIR_luc_DNF2GRA_reg,dataDIR_luc_EBF2GRA_reg,dataDIR_luc_ENF2GRA_reg,dataDIR_luc_GRA2CRO_reg,dataDIR_luc_CROr2CROi_reg],concat_dim='conversion',combine='by_coords').to_array(dim='conversion')
@@ -67,8 +59,22 @@ DS_B17 = xr.open_dataset(dataDIR_B17)
 DS_luc = xr.open_mfdataset([file_luc_DBF2CRO,file_luc_DNF2CRO,file_luc_EBF2CRO,file_luc_ENF2CRO,file_luc_DBF2GRA,file_luc_DNF2GRA,file_luc_EBF2GRA,file_luc_ENF2GRA,file_luc_GRA2CRO,file_luc_CROr2CROi],concat_dim=None,combine='nested').to_array(dim='conversion')
 
 #############################################################
-#information on transitions
+#extract TS data
 #############################################################
+
+#B17 and D18 data
+#dataDIR_D18 = TS_dir+"D18_LST_0.25dw_IGBPdet.nc"
+dataDIR_B17 = TS_dir+"B17_0.25dw_DTS.nc"
+
+dataDIR_D18_day = TS_dir+"LSTday_IGBPdet_gf_0.25bil.nc"
+dataDIR_D18_night = TS_dir+"LSTnight_IGBPdet_gf_0.25bil.nc"
+
+#open TS data
+#DS_D18 = xr.open_dataset(dataDIR_D18)
+DS_B17_tmp = xr.open_dataset(dataDIR_B17)
+
+DS_D18_day = xr.open_dataset(dataDIR_D18_day).Delta_LSTday_gapfilled
+DS_D18_night = xr.open_dataset(dataDIR_D18_night).Delta_LSTnight_gapfilled
 
 #conversions/transitions Duveillier
 #;;Vegetation transition codes
@@ -166,69 +172,70 @@ print(ind_D18)
 print(ind_B17)
 
 
-#extract D18 and B17----------------------------------------
+#extract D18 and B17 data----------------------------------------
 
 #first mean of day and night for D18
-DS_D18_tmp = (DS_D18.Delta_LSTday.sel(iTr = ind_D18) + DS_D18.Delta_LSTnight.sel(iTr = ind_D18))/2.
+#DS_D18_tmp = (DS_D18.Delta_LSTday.sel(iTr = ind_D18) + DS_D18.Delta_LSTnight.sel(iTr = ind_D18))/2.
+DS_D18_tmp = (DS_D18_day.sel(iTr = ind_D18) + DS_D18_night.sel(iTr = ind_D18))/2.
 
 #then extract right season
 if (season == "DJF"):
-    DS_D18_day = DS_D18_tmp.sel(mon=[12.5,1.5,2.5]).mean(dim=["mon"])
-    DS_B17_day = DS_B17.dTs_DJF.isel(conv = ind_B17)
+    DS_D18 = DS_D18_tmp.sel(time=[12.5,1.5,2.5]).mean(dim=["time"])
+    DS_B17 = DS_B17_tmp.dTs_DJF.isel(conv = ind_B17)
 
 elif (season == "MAM"):
-    DS_D18_day = DS_D18_tmp.sel(mon=[3.5,4.5,5.5]).mean(dim=["mon"])
-    DS_B17_day = DS_B17.dTs_MAM.isel(conv = ind_B17)
+    DS_D18 = DS_D18_tmp.sel(time=[3.5,4.5,5.5]).mean(dim=["time"])
+    DS_B17 = DS_B17_tmp.dTs_MAM.isel(conv = ind_B17)
 
 elif (season == "JJA"):
-    DS_D18_day = DS_D18_tmp.sel(mon=[6.5,7.5,8.5]).mean(dim=["mon"])
-    DS_B17_day = DS_B17.dTs_JJA.isel(conv = ind_B17)
+    DS_D18 = DS_D18_tmp.sel(time=[6.5,7.5,8.5]).mean(dim=["time"])
+    DS_B17 = DS_B17_tmp.dTs_JJA.isel(conv = ind_B17)
 
 elif (season == "SON"):
-    DS_D18_day = DS_D18_tmp.sel(mon=[9.5,10.5,11.5]).mean(dim=["mon"])
-    DS_B17_day = DS_B17.dTs_SON.isel(conv = ind_B17)
+    DS_D18 = DS_D18_tmp.sel(time=[9.5,10.5,11.5]).mean(dim=["time"])
+    DS_B17 = DS_B17_tmp.dTs_SON.isel(conv = ind_B17)
 
 elif (season == "ANN"):
-    DS_D18_day = DS_D18_tmp.mean(dim=["mon"])
-    DS_B17_day = (DS_B17.dTs_DJF.isel(conv = ind_B17) + DS_B17.dTs_MAM.isel(conv = ind_B17) + DS_B17.dTs_JJA.isel(conv = ind_B17) + DS_B17.dTs_SON.isel(conv = ind_B17)) /4.
+    DS_D18 = DS_D18_tmp.mean(dim=["time"])
+    DS_B17 = (DS_B17_tmp.dTs_DJF.isel(conv = ind_B17) + DS_B17_tmp.dTs_MAM.isel(conv = ind_B17) + DS_B17_tmp.dTs_JJA.isel(conv = ind_B17) + DS_B17_tmp.dTs_SON.isel(conv = ind_B17)) /4.
     
 else:
     print("error, season not found")
     
 
 #assign common "conversion" axis to all datasets
-DS_D18_day = DS_D18_day.rename({'iTr' : 'conversion'})
-DS_B17_day = DS_B17_day.rename({'conv' : 'conversion'})
+DS_D18 = DS_D18.rename({'iTr' : 'conversion'})
+DS_B17 = DS_B17.rename({'conv' : 'conversion'})
 
-DS_D18_day = DS_D18_day.assign_coords(conversion=DS_luc.conversion)
-DS_B17_day = DS_B17_day.assign_coords(conversion=DS_luc.conversion)
+DS_D18 = DS_D18.assign_coords(conversion=DS_luc.conversion)
+DS_B17 = DS_B17.assign_coords(conversion=DS_luc.conversion)
 
 
 # change sign for all forest conversions in B17 as they are originaly from GRA/CRO to forest
-DS_B17_day[0:7,:,:] = -DS_B17_day[0:7,:,:]
+DS_B17[0:7,:,:] = -DS_B17[0:7,:,:]
 
 #conversions not existing in B17 are taken from D18 and vice-versa
 ind = np.where(DS_luc.conversion == "DNF2CRO")[0]
 print("DNF2CRO ind:",ind)
-DS_B17_day[ind,:,:] = DS_D18_day[ind,:,:] #DNF2CRO from D18
+DS_B17[ind,:,:] = DS_D18[ind,:,:] #DNF2CRO from D18
 ind = np.where(DS_luc.conversion == "DNF2GRA")[0]
 print("DNF2GRA ind:",ind)
-DS_B17_day[ind,:,:] = DS_D18_day[ind,:,:] #DNF2GRA from D18
+DS_B17[ind,:,:] = DS_D18[ind,:,:] #DNF2GRA from D18
 ind = np.where(DS_luc.conversion == "CROr2CROi")[0]
 print("CROr2CROi ind:",ind)
-DS_D18_day[ind,:,:] = DS_B17_day[ind,:,:] #CROr2CROi from B17
+DS_D18[ind,:,:] = DS_B17[ind,:,:] #CROr2CROi from B17
 
 
 # multiply LUC and LST sensitivity to get actual LUC effect on LST
-TSrec_B17 = DS_B17_day * DS_luc
-TSrec_D18 = DS_D18_day * DS_luc
+TSrec_B17 = DS_B17 * DS_luc
+TSrec_D18 = DS_D18 * DS_luc
 
 # derive a map showing where B17 or D18 have no values while a conversion exists
 DS_luc_sum = DS_luc.sum(dim=["time"])
 #B17_missing = DS_B17_day.notnull().where(DS_luc_sum != 0.)
 #D18_missing = DS_D18_day.notnull().where(DS_luc_sum != 0.)
-B17_missing = DS_luc_sum.where(DS_B17_day.isnull())
-D18_missing = DS_luc_sum.where(DS_D18_day.isnull())
+B17_missing = DS_luc_sum.where(DS_B17.isnull())
+D18_missing = DS_luc_sum.where(DS_D18.isnull())
 
 #write full transient data to netcdf
 
