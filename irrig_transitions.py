@@ -10,7 +10,7 @@ import xarray as xr
 ##########################################################
 # User settings
 ##########################################################
-scen = "reg"
+scen = "low"
 out_dir = "/net/ch4/landclim/edavin/LUMIP/python/"
 #out_dir = "/net/ch4/landclim/edavin/LUMIP/python/"
 #############################################################
@@ -34,7 +34,9 @@ else:
     print("error, version not found")
     
 states_luh2 = "/net/exo/landclim/data/dataset/LUH2/"+vluh+"/0.25deg_lat-lon_1y/original/states.nc"
-manage_luh2 = "/net/exo/landclim/data/dataset/LUH2/"+vluh+"/0.25deg_lat-lon_1y/original/management.nc"
+#manage_luh2 = "/net/exo/landclim/data/dataset/LUH2/"+vluh+"/0.25deg_lat-lon_1y/original/management.nc"
+#only crop fraction is different between high and low, while we keep irrig frac from reg
+manage_luh2 = "/net/exo/landclim/data/dataset/LUH2/v2h/0.25deg_lat-lon_1y/original/management.nc"
 
 blue = "/net/ch4/landclim/edavin/LUMIP/BLUE/PFT11corr/DBF2CRO_time_reg_gracorr.nc" #only for time axis
 potveg = "/net/ch4/landclim/edavin/LUMIP/BLUE/potveg_tropforestoutside40-corr_ratmax.nc"

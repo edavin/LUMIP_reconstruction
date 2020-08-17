@@ -63,14 +63,12 @@ DS_luc = xr.open_mfdataset([file_luc_DBF2CRO,file_luc_DNF2CRO,file_luc_EBF2CRO,f
 #############################################################
 
 #B17 and D18 data
-#dataDIR_D18 = TS_dir+"D18_LST_0.25dw_IGBPdet.nc"
-dataDIR_B17 = TS_dir+"B17_0.25dw_DTS.nc"
+dataDIR_B17 = TS_dir+"TS_B17_0.25nn.nc"
 
-dataDIR_D18_day = TS_dir+"LSTday_IGBPdet_gf_0.25bil.nc"
-dataDIR_D18_night = TS_dir+"LSTnight_IGBPdet_gf_0.25bil.nc"
+dataDIR_D18_day = TS_dir+"LSTday_IGBPdet_gf_0.25nn.nc"
+dataDIR_D18_night = TS_dir+"LSTnight_IGBPdet_gf_0.25nn.nc"
 
 #open TS data
-#DS_D18 = xr.open_dataset(dataDIR_D18)
 DS_B17_tmp = xr.open_dataset(dataDIR_B17)
 
 DS_D18_day = xr.open_dataset(dataDIR_D18_day).Delta_LSTday_gapfilled
