@@ -33,8 +33,8 @@ season = "JJA" #"JJA" or "DJF"
 scen = "reg"
 blue_dir = "/net/ch4/landclim/edavin/LUMIP/BLUE/PFT11corr/"
 blue_ver = "gracorr" #addc2p  new
-irri_dir = "/net/ch4/landclim/edavin/LUMIP/BLUE/"
-TS_dir = "/landclim/edavin/LUMIP/TS_data/"
+irri_dir = "/net/ch4/landclim/edavin/LUMIP/python/"
+TS_dir = "/net/ch4/landclim/edavin/LUMIP/TS_data/"
 out_dir = "/net/ch4/landclim/edavin/LUMIP/python/"
 #############################################################
 
@@ -49,7 +49,7 @@ file_luc_DNF2GRA = blue_dir+"DNF2GRA_time_"+scen+"_"+blue_ver+".nc"
 file_luc_EBF2GRA = blue_dir+"EBF2GRA_time_"+scen+"_"+blue_ver+".nc"
 file_luc_ENF2GRA = blue_dir+"ENF2GRA_time_"+scen+"_"+blue_ver+".nc"
 file_luc_GRA2CRO = blue_dir+"GRA2CRO_time_"+scen+"_"+blue_ver+".nc"
-file_luc_CROr2CROi = irri_dir+"CROr2CROi_time_"+scen+"_new.nc"
+file_luc_CROr2CROi = irri_dir+"CROr2CROi_time_"+scen+".nc"
 
 #open and concatenate LUC (BLUE/LUH2) data  
 #this option will reorder datasets alphabeticaly
