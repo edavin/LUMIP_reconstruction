@@ -34,17 +34,20 @@ else:
     print("error, version not found")
     
 states_luh2 = "/net/exo/landclim/data/dataset/LUH2/"+vluh+"/0.25deg_lat-lon_1y/original/states.nc"
-#manage_luh2 = "/net/exo/landclim/data/dataset/LUH2/"+vluh+"/0.25deg_lat-lon_1y/original/management.nc"
-#only crop fraction is different between high and low, while we keep irrig frac from reg
-manage_luh2 = "/net/exo/landclim/data/dataset/LUH2/v2h/0.25deg_lat-lon_1y/original/management.nc"
+manage_luh2 = "/net/exo/landclim/data/dataset/LUH2/"+vluh+"/0.25deg_lat-lon_1y/original/management.nc"
+
+#for testing: only crop fraction is different between high and low, while we keep irrig frac from reg
+#manage_luh2 = "/net/exo/landclim/data/dataset/LUH2/v2h/0.25deg_lat-lon_1y/original/management.nc"
 
 blue = "/net/ch4/landclim/edavin/LUMIP/BLUE/PFT11corr/DBF2CRO_time_reg_gracorr.nc" #only for time axis
-potveg = "/net/ch4/landclim/edavin/LUMIP/BLUE/potveg_tropforestoutside40-corr_ratmax.nc"
+potveg = "/net/ch4/landclim/edavin/LUMIP/BLUE/PFT11corr/potveg_tropforestoutside40-corr_ratmax_invertlat_shiftgrid.nc"
 
 #calculate total irrigated fraction as a fraction of the grid cell
 frac_irr = (xr.open_dataset(states_luh2,decode_times=False).c3ann * xr.open_dataset(manage_luh2,decode_times=False).irrig_c3ann) + (xr.open_dataset(states_luh2,decode_times=False).c4ann * xr.open_dataset(manage_luh2,decode_times=False).irrig_c4ann) + (xr.open_dataset(states_luh2,decode_times=False).c3per * xr.open_dataset(manage_luh2,decode_times=False).irrig_c3per) + (xr.open_dataset(states_luh2,decode_times=False).c4per * xr.open_dataset(manage_luh2,decode_times=False).irrig_c4per) + (xr.open_dataset(states_luh2,decode_times=False).c3nfx * xr.open_dataset(manage_luh2,decode_times=False).irrig_c3nfx)
 
-#frac_irr = frac_irr * potveg
+#scale by total vegetation fraction since fractions in LUH2 are with respect to vegetated area
+vegtot = xr.open_dataset(potveg).cover_fract.sum(dim="type")
+frac_irr = frac_irr * vegtot
 
 #then calculate the transitions by taking the time derivative
 #this will result in a transition matrix with one time step less than the matrix of states (i.e. only until 2014)
