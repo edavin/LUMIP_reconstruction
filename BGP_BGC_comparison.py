@@ -54,7 +54,13 @@ out_dir = "/net/ch4/landclim/edavin/LUMIP/python/"
 ####################################
 
 #Ts-equivalent of LUC BGC flux (i.e. 367 GtC since 850)
-ts_map = xr.open_dataset(BGC_file).ts[0,:,:]
+#ts_map = xr.open_dataset(BGC_file).ts[0,:,:]  
+
+TCRE = xr.open_dataset(TCRE_file).Ts_TCRE
+
+co2 = 367  #in GtC, cummulative CO2 emissions since 850 (from BLUE) 
+
+ts_map = TCRE * co2
 
 #plot map of Ts-equivalent of LUC BGC flux
 data = ts_map
