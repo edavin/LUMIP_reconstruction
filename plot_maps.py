@@ -6,7 +6,6 @@ Created 2020
 """
 
 import xarray as xr
-import cartopy .crs as ccrsf
 import mplotutils as mpu
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
