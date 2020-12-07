@@ -56,11 +56,32 @@ out_dir = "/net/ch4/landclim/edavin/LUMIP/python/"
 #Ts-equivalent of LUC BGC flux (i.e. 367 GtC since 850)
 #ts_map = xr.open_dataset(BGC_file).ts[0,:,:]  
 
-TCRE = xr.open_dataset(TCRE_file).Ts_TCRE
+TCRE_monthly = xr.open_dataset(TCRE_file).Ts_TCRE
 
+#extract season needed
+if (season == "DJF"):
+    TCRE = TCRE_monthly.sel(time=[12,1,2]).mean(dim=["time"])
+
+elif (season == "MAM"):
+    TCRE = TCRE_monthly.sel(time=[3,4,5]).mean(dim=["time"])
+
+elif (season == "JJA"):
+    TCRE = TCRE_monthly.sel(time=[6,7,8]).mean(dim=["time"])
+
+elif (season == "SON"):
+    TCRE = TCRE_monthly.sel(time=[9,10,11]).mean(dim=["time"])
+
+elif (season == "ANN"):
+    TCRE = TCRE_monthly.mean(dim=["time"])
+   
+else:
+    print("error, season not found")
+   
 co2 = 367  #in GtC, cummulative CO2 emissions since 850 (from BLUE) 
 
 ts_map = TCRE * co2
+ts_map = ts_map.rename({'longitude' : 'lon'})
+ts_map = ts_map.rename({'latitude' : 'lat'})
 
 #plot map of Ts-equivalent of LUC BGC flux
 data = ts_map
