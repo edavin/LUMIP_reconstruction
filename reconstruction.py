@@ -29,8 +29,8 @@ import matplotlib.pyplot as plt
 # User settings
 ##########################################################
 #years_start_end = [1900, 2017]
-season = "JJA" #"JJA" or "DJF"
-scen = "reg"
+season = "DJF" #"JJA" or "DJF"
+scen = "low"
 blue_dir = "/net/ch4/landclim/edavin/LUMIP/BLUE/PFT11corr/"
 blue_ver = "gracorr" #addc2p  new
 irri_dir = "/net/ch4/landclim/edavin/LUMIP/python/"
@@ -240,11 +240,11 @@ D18_missing = DS_luc_sum.where(DS_D18.isnull())
 path_file = out_dir+"TSrec_"+scen+"_B17_"+season+".nc"
 print(path_file)
 #TSrec_B17.to_dataset(name='TSrec').to_netcdf(path=path_file, unlimited_dims={'time':True},format='NETCDF4')
-#TSrec_B17.to_dataset(name='TSrec').to_netcdf(path=path_file, unlimited_dims={'time':True})
+TSrec_B17.to_dataset(name='TSrec').to_netcdf(path=path_file, unlimited_dims={'time':True})
 
 path_file = out_dir+"TSrec_"+scen+"_D18_"+season+".nc"
 print(path_file)
-#TSrec_D18.to_dataset(name='TSrec').to_netcdf(path=path_file, unlimited_dims={'time':True})
+TSrec_D18.to_dataset(name='TSrec').to_netcdf(path=path_file, unlimited_dims={'time':True})
 
 #write integrated effect to netcdf
 
