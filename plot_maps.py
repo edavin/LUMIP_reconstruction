@@ -13,27 +13,28 @@ import cartopy.crs as ccrs
 ##########################################################
 # User settings
 ##########################################################
-
-#season = "JJA" #"JJA" or "DJF"
-#scen = "reg"
-
+year_start = 1850
+year_end = 2014
+seasons = ["DJF","JJA"]
+#seasons = ["JJA"]
+scenarios = ["reg","high","low"]
+#scenarios = ["low"]
 in_dir = "/net/ch4/landclim/edavin/LUMIP/python/"
 out_dir = "/net/ch4/landclim/edavin/LUMIP/python/"
 #############################################################
 
-
-#for scen in ["reg","high","low"]:
-for scen in ["reg"]:
-    #for season in ["DJF","JJA","ANN"]:
-    for season in ["JJA"]:
+#loop over scenarios
+for scen in scenarios:
+    #loop over seasons
+    for season in seasons:
         for DS in ["D18","B17","combo"]:
             if DS == "D18" or DS == "B17":
-                file_in = in_dir+"TSrec_"+scen+"_"+DS+"_"+season+"_850-2015sum.nc"
+                file_in = in_dir+"TSrec_"+scen+"_"+DS+"_"+season+"_"+str(year_start)+"-"+str(year_end)+"sum.nc"
                 print(file_in)
                 rec = xr.open_dataset(file_in).TSrec
             elif DS == "combo":
-                file_B17 = in_dir+"TSrec_"+scen+"_B17_"+season+"_850-2015sum.nc"
-                file_D18 = in_dir+"TSrec_"+scen+"_D18_"+season+"_850-2015sum.nc"
+                file_B17 = in_dir+"TSrec_"+scen+"_B17_"+season+"_"+str(year_start)+"-"+str(year_end)+"sum.nc"
+                file_D18 = in_dir+"TSrec_"+scen+"_D18_"+season+"_"+str(year_start)+"-"+str(year_end)+"sum.nc"
                 rec = (xr.open_dataset(file_B17).TSrec + xr.open_dataset(file_D18).TSrec) / 2.
             
             defo = rec.sel(conversion=['DBF2CRO', 'DBF2GRA', 'DNF2CRO', 'DNF2GRA', 'EBF2CRO', 'EBF2GRA', 'ENF2CRO', 'ENF2GRA',]).sum(dim=["conversion"])
@@ -53,7 +54,7 @@ for scen in ["reg"]:
                 print(datadict[key].shape)
     
                 data = datadict[key]
-                file = f'{out_dir}TSrec_{key}_{scen}_{DS}_{season}_850-2015sum.pdf'
+                file = f'{out_dir}TSrec_{key}_{scen}_{DS}_{season}_{str(year_start)}-{str(year_end)}sum.pdf'
 
                 f, ax = plt.subplots(1, 1, subplot_kw=dict(projection=ccrs.Robinson()))
 
